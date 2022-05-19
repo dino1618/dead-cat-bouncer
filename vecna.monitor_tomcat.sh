@@ -36,7 +36,8 @@
 #############################################################################
 SCRIPTNAME=vecna.monitor_tomcat.sh
 TFTPBOOT_DIR='/tftpboot'
-POSTGRESQL="postgresql-9.3"
+#POSTGRESQL="postgresql-9.3"
+POSTGRESQL="postgresql-12"
 
 # For debugging 
 # touch /var/log/$SCRIPTNAME.log.debug
@@ -143,8 +144,37 @@ function check_root_user ()
    fi
    echo "$FUNCNAME: done"
 }
-	
+
 function check_postgres_status ()
+{
+ # Active: active (running) since Wed 2022-05-18 22:04:36 EDT; 13s ago
+ # Active: inactive (dead) since Wed 2022-05-18 22:00:36 EDT; 2min 18s ago
+ echo "$FUNCNAME: start"
+ case $POSTGRESQL in
+   postgresql-9.3) 
+     if [ "`systemctl status postgresql-9.3 | grep 'Active: active (running) since'`" ]
+       then
+         echo "postgresql-9.3 is running."
+     else
+       echo "ERROR:`date` postgresql-9.3 not running."
+       echo "Attempting to restart..."
+       systemctl restart postgresql-9.3 
+     fi;;
+   postgresql-12)
+     if [ "`systemctl status postgresql-12 | grep 'Active: active (running) since'`" ]
+       then
+         echo "postgresql-12 is running."
+     else
+       echo "ERROR:`date` postgresql-12 not running."
+       echo "Attempting to restart..."
+       systemctl restart postgresql-12 
+     fi;;
+   *) echo "ERROR:`date` Postgresql version can't be determined.";; 
+ esac
+ echo "$FUNCNAME: done"
+}
+	
+function check_postgres_status_old ()
 {
 # Active: active (exited)
 # Active: inactive (dead)
@@ -160,6 +190,7 @@ echo "$FUNCNAME: start"
 	   #exit 1
 	fi
       fi 
+
       if [ "$POSTGRESQL" = "postgresql-12" ];then    
 	if [ "`systemctl status postgresql-12 | grep Active | grep active | grep exited `" ]
 	   then
