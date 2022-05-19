@@ -36,8 +36,8 @@
 #############################################################################
 SCRIPTNAME=vecna.monitor_tomcat.sh
 TFTPBOOT_DIR='/tftpboot'
-#POSTGRESQL="postgresql-9.3"
-POSTGRESQL="postgresql-12"
+POSTGRESQL="postgresql-9.3"
+#POSTGRESQL="postgresql-12"
 
 # For debugging 
 # touch /var/log/$SCRIPTNAME.log.debug
@@ -147,12 +147,16 @@ function check_root_user ()
 
 function check_postgres_status ()
 {
- # Active: active (running) since Wed 2022-05-18 22:04:36 EDT; 13s ago
- # Active: inactive (dead) since Wed 2022-05-18 22:00:36 EDT; 2min 18s ago
+ # postgresql-12
+ # Active: active (running) since
+ # Active: inactive (dead) since
+ # postgresql-9.3
+ # Active: active (exited) since
+ # Active: inactive (dead) since
  echo "$FUNCNAME: start"
  case $POSTGRESQL in
    postgresql-9.3) 
-     if [ "`systemctl status postgresql-9.3 | grep 'Active: active (running) since'`" ]
+     if [ "`systemctl status postgresql-9.3 | grep 'Active: active (exited) since'`" ]
        then
          echo "postgresql-9.3 is running."
      else
