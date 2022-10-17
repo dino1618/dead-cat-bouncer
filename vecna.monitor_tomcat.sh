@@ -35,7 +35,7 @@
 #############################################################################
 SCRIPTNAME=vecna.monitor_tomcat.sh
 TFTPBOOT_DIR='/tftpboot'
-POSTGRESQL=postgresql-9.3
+POSTGRESQL=postgresql-12
 
 # For debugging 
 # touch /var/log/$SCRIPTNAME.log.debug
